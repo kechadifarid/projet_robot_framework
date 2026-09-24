@@ -23,6 +23,7 @@ pipeline {
 
             steps {
                     sh '''
+                                rm -rf allure-results
                                 python -m venv .venv
                                 .venv/bin/pip install --upgrade pip
                                 .venv/bin/pip install robotframework robotframework-seleniumlibrary robotframework-datadriver allure-robotframework

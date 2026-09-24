@@ -5,8 +5,13 @@ Library    SeleniumLibrary
 ${user}    id:username
 ${pwd}    id:password
 ${btn}    css:[data-testid="login-submit"]
+${msgerror}    css:[data-testid="login-error"]
 *** Keywords ***
 connexion
-    Input Text    ${user}    jean_dupont
-    Input Text    ${pwd}    Baguette42!
+    [Arguments]    ${username}    ${password}
+    Input Text    ${user}    ${username}
+    Input Text    ${pwd}    ${password}
     Click Button    ${btn}
+getMEssageError
+    ${msg}=    Get Text    ${msgerror}
+    RETURN    ${msg}

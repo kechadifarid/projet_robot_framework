@@ -1,0 +1,6 @@
+*** Test Cases ***,${user},${pwd},${result}
+cas1,jean_dupont,Baguette42!,OK
+cas2,jean_dupont,Baguette42!,OK
+cas3,jean_dupont,Baguette42!,OK
+cas4,tortue_du_web,Baguette42!,OK
+cas5,sfsfsc,Baguette42!,KO

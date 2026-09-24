@@ -1,0 +1,36 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Tests') {
+
+            agent {
+    docker {
+        image 'ppodgorsek/robot-framework:latest'
+        args "--entrypoint='' --shm-size=2g"
+        reuseNode true
+    }
+}
+
+            steps {
+                sh 'python -m venv .venv'
+                sh ".venv/Scripts/activate"
+                sh "pip install robotframework"
+                sh 'pip install'
+                sh 'pip install robotframework-seleniumlibrary'
+                sh 'robot --listener allure_robotframework:allure-results ./tests/'
+
+            }
+        }
+    }
+
+    post {
+        always {
+            allure([
+                results: [[path: 'target/allure-results']]
+            ])
+        }
+    }
+}

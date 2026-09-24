@@ -18,6 +18,7 @@ pipeline {
                     .venv/bin/pip install --upgrade pip
                     .venv/bin/pip install robotframework
                     .venv/bin/pip install robotframework-seleniumlibrary
+                    .venv/bin/pip install robotframework-datadriver
                     .venv/bin/pip install allure-robotframework
 
                     .venv/bin/robot \

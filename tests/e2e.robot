@@ -9,7 +9,7 @@ Resource    ../pages/CartPage.resource
 Resource    ../pages/CheckoutPage.resource
 Resource    ../pages/paimenetFormPage.resource
 Test Setup    init
-#Test Teardown    fermer
+Test Teardown    fermer
 *** Test Cases ***
 e2e
     connexion

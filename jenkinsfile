@@ -3,37 +3,31 @@ pipeline {
 
     stages {
         stage('Tests') {
-            agent {
-                docker {
-                    image 'ppodgorsek/robot-framework:latest'
-                    args "--entrypoint='' --shm-size=2g"
-                    reuseNode true
-                }
-            }
-
             steps {
-                sh '''
-                    python -m venv .venv
+                script {
+                    docker.image('selenium/standalone-chrome:latest').withRun('--shm-size=2g') { chrome ->
+                        docker.image('ppodgorsek/robot-framework:latest').inside("--entrypoint='' --link ${chrome.id}:chrome") {
+                            sh '''
+                                python -m venv .venv
+                                .venv/bin/pip install --upgrade pip
+                                .venv/bin/pip install robotframework robotframework-seleniumlibrary robotframework-datadriver allure-robotframework
 
-                    .venv/bin/pip install --upgrade pip
-                    .venv/bin/pip install robotframework
-                    .venv/bin/pip install robotframework-seleniumlibrary
-                    .venv/bin/pip install robotframework-datadriver
-                    .venv/bin/pip install allure-robotframework
-
-                    .venv/bin/robot \
-                        --listener allure_robotframework:allure-results \
-                        ./tests/
-                '''
+                                .venv/bin/robot \
+                                    --listener allure_robotframework:allure-results \
+                                    --variable REMOTE_URL:http://chrome:4444/wd/hub \
+                                    --variable BROWSER:chrome \
+                                    ./tests/
+                            '''
+                        }
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            allure([
-                results: [[path: 'allure-results']]
-            ])
+            allure([results: [[path: 'allure-results']]])
         }
     }
 }
